@@ -1,0 +1,19 @@
+Three ways to extract the salaries from the table
+
+-- simple way to select the second max salary from the employee table
+select * from employees
+  select top 1 salary from (
+  select distinct top 2 Salary  from employees order by salary desc) a
+  order by Salary
+
+-- Just to extract only the second max salary 
+
+select MAX(salary) from Employees
+  where Salary < (select MAX(salary) from Employees)
+
+-Generic query to extract the second , third max salary
+- it will eliminate the duplicate cases as well
+  with result as(
+  select salary, DENSE_RANK() over (order by salary desc) as salaryrank
+  from Employees)
+  select salary from result where salaryrank = 2  --enter the order of the salary you want to extract
